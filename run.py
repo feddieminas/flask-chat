@@ -3,7 +3,8 @@ from datetime import datetime
 from flask import Flask, redirect, render_template, request, session, url_for
 
 app = Flask(__name__)
-app.secret_key = "randomstring123" # to generate a session id for cookie, we need to give to an app a secret_key
+app.secret_key = os.getenv("SECRET","randomstring123") #make secret key an enviromental variable
+#app.secret_key = "randomstring123" # to generate a session id for cookie, we need to give to an app a secret_key
 messages = []
 
 def add_message(username, message):
@@ -59,7 +60,7 @@ def send_message(username, message):
     #return "{0}: {1}".format(username, message)
 '''
     
-app.run(host=os.getenv('IP'), port=int(os.getenv('PORT')), debug=True) 
+app.run(host=os.getenv('IP', "0.0.0.0"), port=int(os.getenv('PORT', "5000")), debug=False) #we set ip and port values do not need to do later in Heroku
 
 
 
