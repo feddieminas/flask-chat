@@ -14,11 +14,9 @@ def add_message(username, message):
         message})
     #messages.append("({}) {}: {}".format(now, username,message))
 
-'''
 def get_all_messages():
     """Get all of the messages and separate them with a 'br'"""
     return "<br>".join(messages)
-'''
 
 @app.route('/', methods = ["GET", "POST"])
 def index():
@@ -40,25 +38,24 @@ def user(username):
     
     if request.method == "POST":
         username = session["username"]
-        message = request.form["message"]
+        message = request.form["message"] #since render chat.html can take req.
         add_message(username, message)
         return redirect(url_for("user", username=session["username"])) # ex redirect(session["username"]) - this will redirect to @app.route('/<username>') 
+        # need redirect recursion for new messages
     
     return render_template("chat.html", username=username, 
-        chat_messages = messages)
+        chat_messages = messages) # chat.html derives from the route so form applies
     #return "<h1>Welcome, {0}</h1>{1}".format(username, messages)
     #return "<h1>Welcome, {0}</h1>{1}".format(username, get_all_messages())
     #return "Welcome, {0} - {1}".format(username, messages)
     #return "Hi " + username
     
-'''    
 @app.route('/<username>/<message>')
 def send_message(username, message):
     """Create a new message and redirect back to the chat page"""
     add_message(username, message)
     return redirect(username) #redirect to the users personalized welcome page
     #return "{0}: {1}".format(username, message)
-'''
     
 app.run(host=os.getenv('IP', "0.0.0.0"), port=int(os.getenv('PORT', "5000")), debug=False) #we set ip and port values do not need to do later in Heroku
 
